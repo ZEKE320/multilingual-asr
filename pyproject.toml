@@ -1,0 +1,135 @@
+[project]
+name = "multilingual-asr"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "cuda-python>=12.9.0",
+  "faster-whisper>=1.1.1",
+  "hf-xet>=1.1.5",
+  "nemo-toolkit[asr]>=2.3",
+  "numpy<2.0",
+  "pydub>=0.25.1",
+  "pyloudnorm>=0.1.1",
+  "rich>=14.0.0",
+  "soundcard>=0.4.4",
+  "sounddevice>=0.5.1",
+  "soundfile>=0.13.1",
+  "torch>=2.7.0",
+  "typer>=0.15.3",
+  "webrtcvad>=2.0.10",
+]
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu128" }]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.ruff.lint]
+extend-select = [
+  # ── 型アノテーション・型チェック ──────────────────
+  "ANN", # flake8-annotations: flake8の型アノテーションの検査
+  "TC",  # flake8-type-checking: タイプチェック用インポートと前方参照の管理
+
+  # ── ドキュメンテーション ──────────────────────────
+  "D",   # pydocstyle: PEP 257準拠のPythonドックストリング静的解析
+  "DOC", # pydoclint: ドックストリングと実装の不整合検出
+
+  # ── 命名・シグネチャ ─────────────────────────────
+  "N",   # pep8-naming: PEP 8命名規約の検証
+  "SLF", # flake8-self: privateメンバアクセス検査
+  "ARG", # flake8-unused-arguments: 未使用引数の検出
+  "FBT", # flake8-boolean-trap: booleanトラップアンチパターンの検出
+
+  # ── インポート管理 ────────────────────────────────
+  "I",   # isort: import文のソートと管理
+  "TID", # flake8-tidy-imports: import整理の検査
+  "ICN", # flake8-import-conventions: import/alias規約の検証
+
+  # ── コレクション・構文スタイル ─────────────────────
+  "COM", # flake8-commas: 末尾カンマの検証
+  "C4",  # flake8-comprehensions: 内包表記の改善提案
+
+  # ── コード品質・バグ検出 ──────────────────────────
+  "E",    # pycodestyle Error: コードスタイルエラー検出
+  "W",    # pycodestyle Warning: コードスタイル警告検出
+  "F",    # Pyflakes: 潜在的バグ検出
+  "B",    # flake8-bugbear: バグの可能性を警告
+  "PL",   # Pylint: 包括的静的解析
+  "RUF",  # Ruff固有ルール: Ruff独自のルール検査
+  "SIM",  # flake8-simplify: コード簡略化提案
+  "PIE",  # flake8-pie: コード品質検査
+  "FURB", # refurb: リファクタリング支援
+
+  # ── モダン化・最適化 ───────────────────────────────
+  "PERF", # Perflint: パフォーマンス最適化検出
+  "UP",   # pyupgrade: Python構文のモダン化
+  "RET",  # flake8-return: return文の最適化検査
+
+  # ── 数値・科学計算・データ分析 ──────────────────
+  "NPY", # NumPy-specific rules: NumPyコード最適化検査
+  "PD",  # pandas-vet: Pandasのリンティング
+
+  # ── 文字列・クオート・リテラル ───────────────────
+  "Q",   # flake8-quotes: 文字列クォートスタイル検証
+  "FLY", # flynt: f文字列変換提案
+  "ISC", # flake8-implicit-str-concat: 暗黙的文字列連結検出
+
+  # ── 日付・時刻 ──────────────────────────────────
+  "DTZ", # flake8-datetimez: タイムゾーン対応の日付時刻検証
+
+  # ── 例外処理 ──────────────────────────────────
+  "TRY", # tryceratops: 例外構造検査
+  "BLE", # flake8-blind-except: blind except検出
+  "EM",  # flake8-errmsg: 例外メッセージ検証
+  "RSE", # flake8-raise: raise文検査
+
+  # ── ファイル・パス操作 ───────────────────────────
+  "PTH", # flake8-use-pathlib: pathlib使用促進
+
+  # ── 非同期・並行処理 ─────────────────────────────
+  "ASYNC", # flake8-async: 非同期処理検証
+
+  # ── テストコード ─────────────────────────────────
+  "PT", # flake8-pytest-style: pytestスタイル検証
+
+  # ── セキュリティ ─────────────────────────────────
+  "S", # flake8-bandit: セキュリティ問題検出
+
+  # ── ロギング・出力・デバッグ ────────────────────
+  "LOG", # flake8-logging: ロギング呼び出し検証
+  "G",   # flake8-logging-format: ログフォーマット仕様検証
+  "T20", # flake8-print: printステートメント検出
+
+  # ── 複雑度・メトリクス ──────────────────────────
+  "C90", # mccabe: コード複雑度計測
+
+  # ── コメント・タスク管理 ───────────────────────
+  "FIX", # flake8-fixme: FIXMEコメント検出
+  "TD",  # flake8-todos: TODOコメント検出
+
+  # ── カスタム検査・プロジェクト固有 ──────────────
+  "PGH", # pygrep-hooks: 正規表現ベースのカスタム検査
+]
+
+
+extend-ignore = [
+  "COM812", # 最後尾の要素にカンマを使用することに関する警告
+  "D212",   # Docstringの１行目の開始位置に関する警告
+  "D415",   # Docstringの句読点の使用に関する警告
+  "G004",   # ロギングのフォーマットに関する警告
+  "RET504", # returnする値を変数に代入することに関する警告
+  "RUF001", # 文字列内の、見た目がまぎらわしいUnicode文字に関する警告
+  "RUF002", # Docstring内の、見た目がまぎらわしいUnicode文字に関する警告
+  "RUF003", # コメント内の、見た目がまぎらわしいUnicode文字に関する警告
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = ["typer.Option"]
